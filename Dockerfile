@@ -25,7 +25,7 @@ RUN apt-get install -y \
 	&& mv /etc/mongod.conf /etc/mongod.conf.orig
 RUN apt-get clean
 
-RUN apt-get autoremove --purge -y python3.7 libpython3.7 curl gnupg
+RUN apt-get autoremove --purge -y python3.7 libpython3.7 curl gnupg software-properties-common
 
 RUN mkdir -p /data/db /data/configdb \
 	&& chown -R $MONGO_USER:$MONGO_USER /data/db /data/configdb
