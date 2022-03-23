@@ -29,13 +29,15 @@ RUN mkdir -p /data/db /data/configdb \
 	&& chown -R $MONGO_USER:$MONGO_USER /data/db /data/configdb
 
 RUN mkdir -p /data/db/
+COPY docker-entrypoint.sh /usr/local/bin/
 
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN chown $MONGO_USER:$MONGO_USER /var/log /data/db
+ENV PATH=/usr/local/bin:$PATH
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 USER $MONGO_USER:$MONGO_USER
-
-COPY docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 27017
 CMD ["mongod"]
