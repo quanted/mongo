@@ -6,8 +6,8 @@ ENV MONGO_VERSION 5.0.6
 
 RUN addgroup --system $MONGO_USER && adduser --system $MONGO_USER && usermod -a -G $MONGO_USER $MONGO_USER
 
-RUN apt update -y
-RUN apt install --no-install-recommends -y dirmngr gnupg apt-transport-https software-properties-common ca-certificates curl && \
+RUN apt-get update -y
+RUN apt-get install --no-install-recommends -y dirmngr gnupg apt-transport-https software-properties-common ca-certificates curl && \
     rm -rf /var/lib/apt/lists/*
 RUN curl -fsSL https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
 
@@ -24,6 +24,8 @@ RUN apt-get install -y \
 	&& rm -rf /var/lib/mongodb \
 	&& mv /etc/mongod.conf /etc/mongod.conf.orig
 RUN apt-get clean
+
+RUN apt-get autoremove --purge -y python3.7 libpython3.7 curl gnupg
 
 RUN mkdir -p /data/db /data/configdb \
 	&& chown -R $MONGO_USER:$MONGO_USER /data/db /data/configdb
