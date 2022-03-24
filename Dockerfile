@@ -1,4 +1,4 @@
-FROM debian:10.11-slim
+FROM debian:11-slim
 
 ENV MONGO_USER mongodb
 ENV MONGO_PACKAGE mongodb-org
@@ -25,8 +25,7 @@ RUN apt-get install -y \
 	&& mv /etc/mongod.conf /etc/mongod.conf.orig
 RUN apt-get clean
 
-RUN apt-get purge --auto-remove -y python3.7 python3
-RUN dpkg --remove --force-depends gcc-8-base curl
+RUN apt-get purge --auto-remove -y python3
 RUN rm -rf /usr/local/lib/python3.7
 
 RUN mkdir -p /data/db /data/configdb \
