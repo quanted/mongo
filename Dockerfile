@@ -38,6 +38,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN chown $MONGO_USER:$MONGO_USER /var/log /data/db
 ENV PATH=/usr/local/bin:$PATH
 
+RUN mongod --repair
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 USER $MONGO_USER:$MONGO_USER
