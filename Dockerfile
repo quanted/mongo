@@ -42,7 +42,7 @@ RUN mongod --repair
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-USER $MONGO_USER:$MONGO_USER
+# USER $MONGO_USER:$MONGO_USER
 
 EXPOSE 27017
 CMD ["mongod"]
