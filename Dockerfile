@@ -2,7 +2,7 @@ FROM debian:11-slim
 
 ENV MONGO_USER mongodb
 ENV MONGO_PACKAGE mongodb-org
-ENV MONGO_VERSION 5.0.6
+ENV MONGO_VERSION 5.0.9
 
 RUN addgroup --system $MONGO_USER && adduser --system $MONGO_USER && usermod -a -G $MONGO_USER $MONGO_USER
 
