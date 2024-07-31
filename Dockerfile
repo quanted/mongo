@@ -1,24 +1,29 @@
-FROM debian:11-slim
+FROM debian:11.10-slim
 
-ENV MONGO_USER mongodb
-ENV MONGO_PACKAGE mongodb-org
-ENV MONGO_VERSION 5.0.9
+ENV MONGO_USER=mongodb
+ENV MONGO_PACKAGE=mongodb-org
+ENV MONGO_VERSION=7.0.9
 
 RUN addgroup --system $MONGO_USER && adduser --system $MONGO_USER && usermod -a -G $MONGO_USER $MONGO_USER
 
 RUN apt-get update -y
 RUN apt-get install --no-install-recommends -y dirmngr gnupg apt-transport-https software-properties-common ca-certificates curl && \
     rm -rf /var/lib/apt/lists/*
-RUN curl -fsSL https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
+#RUN curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | apt-key add -
+RUN curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+   gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+   --dearmor
 
-RUN add-apt-repository 'deb https://repo.mongodb.org/apt/debian buster/mongodb-org/5.0 main'
+#RUN add-apt-repository 'deb https://repo.mongodb.org/apt/debian bullseye/mongodb-org/7.0 main'
+RUN echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bullseye/mongodb-org/7.0 main" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 RUN apt-get update -y
 RUN apt-get install -y \
-		${MONGO_PACKAGE}=$MONGO_VERSION \
-		${MONGO_PACKAGE}-server=$MONGO_VERSION \
-		${MONGO_PACKAGE}-shell=$MONGO_VERSION \
-		${MONGO_PACKAGE}-mongos=$MONGO_VERSION \
-		${MONGO_PACKAGE}-tools=$MONGO_VERSION \
+    ${MONGO_PACKAGE}=$MONGO_VERSION \
+    ${MONGO_PACKAGE}-database=$MONGO_VERSION \
+    ${MONGO_PACKAGE}-server=$MONGO_VERSION \
+    ${MONGO_PACKAGE}-shell=$MONGO_VERSION \
+    ${MONGO_PACKAGE}-mongos=$MONGO_VERSION \
+    ${MONGO_PACKAGE}-tools=$MONGO_VERSION \
 	&& rm -f /usr/local/bin/systemctl \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -rf /var/lib/mongodb \
